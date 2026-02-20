@@ -1,2 +1,0 @@
-# UziDropt
-Uzi Dropt Platform
