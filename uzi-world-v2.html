@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UZI WORLD — Fan Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0010;
+  --sidebar-bg: #0f0018;
+  --sidebar-w: 220px;
+  --pink: #ff2d78;
+  --purple: #9b30ff;
+  --cyan: #00f5ff;
+  --gold: #ffd700;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.07);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.45);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  display: flex;
+  cursor: default;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid rgba(255,45,120,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0 1.5rem;
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* subtle animated sidebar gradient */
+.sidebar::before {
+  content:'';
+  position:absolute;
+  top:-60px; left:-60px;
+  width:260px; height:260px;
+  background: radial-gradient(circle, rgba(155,48,255,0.12), transparent 70%);
+  pointer-events:none;
+  animation: orb-drift 12s ease-in-out infinite;
+}
+@keyframes orb-drift {
+  0%,100%{transform:translate(0,0);} 50%{transform:translate(15px,20px);}
+}
+
+.sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.logo-gem {
+  width: 80px; height: 80px;
+  position: relative;
+  margin-bottom: 0.6rem;
+}
+.logo-gem svg { width:100%; height:100%; }
+
+.logo-wordmark {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.2em;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+.logo-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.35em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+
+/* NAV LINKS */
+.nav-links {
+  list-style: none;
+  width: 100%;
+  flex: 1;
+}
+.nav-links li {
+  width: 100%;
+}
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1.5rem;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  position: relative;
+  cursor: pointer;
+}
+.nav-links a::before {
+  content:'';
+  position:absolute;
+  left:0; top:20%; bottom:20%;
+  width:2px;
+  background: var(--pink);
+  border-radius:0 2px 2px 0;
+  transform: scaleY(0);
+  transition: transform 0.25s ease;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: #fff;
+  background: rgba(255,45,120,0.08);
+}
+.nav-links a:hover::before, .nav-links a.active::before {
+  transform: scaleY(1);
+}
+.nav-icon { font-size: 1.05rem; width: 20px; text-align:center; }
+
+/* XP POINTS */
+.sidebar-xp {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+.xp-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.15rem;
+}
+.xp-amount span { color: var(--cyan); }
+.xp-edit {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.xp-edit:hover { color: var(--pink); }
+
+.xp-bar-mini {
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+.xp-bar-fill {
+  height: 100%;
+  width: 22%;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  border-radius: 2px;
+  animation: fillup 1.5s ease-out forwards;
+}
+@keyframes fillup { from{width:0} to{width:22%} }
+
+.sidebar-register {
+  width: 100%;
+  padding: 0.8rem 1.5rem 0;
+}
+.register-btn {
+  display: block;
+  width: 100%;
+  padding: 0.65rem;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  border: none;
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 0.5rem;
+}
+.register-btn:hover { opacity: 0.85; transform:translateY(-1px); }
+
+.logout-btn {
+  display: block;
+  width: 100%;
+  padding: 0.65rem;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.logout-btn:hover { border-color: rgba(255,45,120,0.4); color: #fff; }
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 2rem 2.5rem 3rem;
+  background: var(--bg);
+  position: relative;
+}
+
+/* subtle bg texture */
+.main::before {
+  content:'';
+  position:fixed;
+  top:0; left:var(--sidebar-w); right:0; bottom:0;
+  background: 
+    radial-gradient(ellipse at 80% 10%, rgba(155,48,255,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 80%, rgba(255,45,120,0.04) 0%, transparent 50%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.main > * { position: relative; z-index:1; }
+
+/* SECTION LABEL */
+.section-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.12em;
+  color: var(--pink);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.view-all {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.2s;
+}
+.view-all:hover { color: var(--pink); }
+
+/* ── STORIES ── */
+.stories-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  margin-bottom: 1.5rem;
+}
+.stories-row::-webkit-scrollbar { display:none; }
+
+.story-item {
+  flex-shrink: 0;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.story-item:hover { transform: translateY(-3px); }
+
+.story-thumb {
+  width: 100px;
+  height: 120px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255,45,120,0.25);
+  position: relative;
+  background: linear-gradient(160deg, rgba(155,48,255,0.25), rgba(255,45,120,0.12));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+.story-thumb::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(transparent 50%, rgba(0,0,0,0.6));
+}
+.story-thumb.new {
+  border-color: var(--pink);
+  box-shadow: 0 0 12px rgba(255,45,120,0.3);
+}
+.story-ring {
+  position:absolute;
+  inset:-3px;
+  border-radius:6px;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  z-index:-1;
+}
+
+.story-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ── UZI ONES CTA (replaces Insider Access Forum) ── */
+.uzi-ones-cta {
+  background: linear-gradient(135deg, rgba(155,48,255,0.15), rgba(255,45,120,0.08));
+  border: 1px solid rgba(155,48,255,0.3);
+  border-radius: 6px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.uzi-ones-cta::before {
+  content:'';
+  position:absolute;
+  top:-50%; left:-50%;
+  width:200%; height:200%;
+  background: conic-gradient(transparent 0deg, rgba(155,48,255,0.06) 60deg, transparent 120deg);
+  animation: spin-slow 10s linear infinite;
+  pointer-events:none;
+}
+@keyframes spin-slow { to { transform:rotate(360deg); } }
+.uzi-ones-cta:hover {
+  border-color: rgba(155,48,255,0.6);
+  background: linear-gradient(135deg, rgba(155,48,255,0.22), rgba(255,45,120,0.12));
+  box-shadow: 0 0 30px rgba(155,48,255,0.2);
+}
+.uzi-ones-left { position:relative; z-index:1; }
+.uzi-ones-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+.uzi-ones-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.uzi-ones-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: var(--cyan);
+  text-transform: uppercase;
+}
+.uzi-ones-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative; z-index:1;
+}
+.uzi-ones-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+.ones-stat { text-align:center; }
+.ones-stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing:0.05em;
+  color: var(--gold);
+  line-height:1;
+}
+.ones-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top:0.2rem;
+}
+.cta-arrow {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,45,120,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--pink);
+  transition: all 0.3s;
+  border-radius: 50%;
+}
+.uzi-ones-cta:hover .cta-arrow { background: rgba(255,45,120,0.15); transform: translateX(3px); }
+
+/* ── VIDEOS ── */
+.video-featured {
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background: #000;
+  aspect-ratio: 16/7.5;
+  margin-bottom: 0.8rem;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.video-bg {
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(155,48,255,0.18) 0%, rgba(255,45,120,0.1) 50%, rgba(0,0,0,0.7) 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-size: 5rem;
+}
+.video-overlay {
+  position:absolute; inset:0;
+  background: linear-gradient(transparent 30%, rgba(0,0,0,0.75));
+}
+.video-play {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:60px; height:60px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.6);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem;
+  backdrop-filter:blur(4px);
+  transition:all 0.3s;
+}
+.video-featured:hover .video-play { background:rgba(255,45,120,0.4); border-color:var(--pink); transform:translate(-50%,-50%) scale(1.08); }
+.video-live-badge {
+  position:absolute; top:1rem; left:1rem;
+  display:flex; align-items:center; gap:0.4rem;
+  background:rgba(255,45,120,0.85);
+  padding:0.3rem 0.7rem;
+  font-family:'Space Mono',monospace;
+  font-size:0.55rem; letter-spacing:0.2em;
+  font-weight:700; text-transform:uppercase;
+  border-radius:2px;
+}
+.live-dot { width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1s infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.video-xp {
+  position:absolute; bottom:1rem; left:1rem;
+  background:rgba(0,0,0,0.75);
+  border: 1px solid rgba(0,245,255,0.3);
+  padding:0.3rem 0.7rem;
+  font-family:'Space Mono',monospace;
+  font-size:0.6rem; letter-spacing:0.1em;
+  color:var(--cyan);
+  border-radius:2px;
+  backdrop-filter:blur(4px);
+}
+.video-title-bar {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:1.5rem 1rem 0.8rem;
+  background:linear-gradient(transparent, rgba(0,0,0,0.85));
+}
+.video-title-main {
+  font-family:'Syne',sans-serif;
+  font-weight:700;
+  font-size:0.95rem;
+  line-height:1.35;
+}
+
+.videos-grid-mini {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:0.8rem;
+}
+.video-mini {
+  border-radius:4px;
+  overflow:hidden;
+  cursor:pointer;
+  border:1px solid var(--border);
+  transition:all 0.3s;
+  background:#000;
+}
+.video-mini:hover { border-color:rgba(255,45,120,0.4); transform:translateY(-2px); }
+.video-mini-thumb {
+  aspect-ratio:16/9;
+  background:linear-gradient(135deg, rgba(155,48,255,0.2), rgba(255,45,120,0.1));
+  display:flex; align-items:center; justify-content:center;
+  font-size:2rem;
+  position:relative;
+}
+.video-mini-thumb .mini-play {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,0.3);
+  font-size:1.2rem;
+  opacity:0;
+  transition:opacity 0.2s;
+}
+.video-mini:hover .mini-play { opacity:1; }
+.video-mini-info { padding:0.6rem; }
+.video-mini-xp {
+  font-family:'Space Mono',monospace;
+  font-size:0.5rem; letter-spacing:0.1em;
+  color:var(--cyan);
+  text-transform:uppercase;
+  margin-bottom:0.2rem;
+}
+.video-mini-title {
+  font-size:0.75rem;
+  font-weight:600;
+  line-height:1.3;
+  color:rgba(255,255,255,0.85);
+}
+
+/* ── XP / CHALLENGES PANEL (right of main in wider layout) ── */
+/* We match HVU's two-column feel by having challenges in a side section */
+
+/* ── WIN / SWEEPSTAKES ── */
+.win-banner {
+  background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(155,48,255,0.08));
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius:6px;
+  padding:1.2rem 1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:1.5rem;
+  cursor:pointer;
+  transition:all 0.3s;
+}
+.win-banner:hover { border-color:rgba(255,215,0,0.4); }
+.win-text-row {
+  display:flex; align-items:center; gap:1rem;
+}
+.win-icon { font-size:1.8rem; }
+.win-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem; letter-spacing:0.08em;
+}
+.win-sub {
+  font-family:'Space Mono',monospace;
+  font-size:0.55rem; letter-spacing:0.1em;
+  color:var(--gold); text-transform:uppercase;
+}
+.win-enter {
+  font-family:'Syne',sans-serif;
+  font-weight:700; font-size:0.72rem;
+  padding:0.55rem 1.2rem;
+  background:rgba(255,215,0,0.15);
+  border:1px solid rgba(255,215,0,0.3);
+  color:var(--gold);
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.2s;
+  border-radius:2px;
+}
+.win-enter:hover { background:rgba(255,215,0,0.25); }
+
+/* ── CHALLENGES ── */
+.challenges-row {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0.8rem;
+  margin-bottom:1.5rem;
+}
+.challenge-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1rem;
+  cursor:pointer;
+  transition:all 0.3s;
+}
+.challenge-card:hover { border-color:rgba(0,245,255,0.3); background:rgba(0,245,255,0.04); }
+.ch-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+.ch-type {
+  font-family:'Space Mono',monospace;
+  font-size:0.52rem; letter-spacing:0.15em;
+  color:var(--muted); text-transform:uppercase;
+}
+.ch-xp {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.95rem; letter-spacing:0.05em;
+  color:var(--cyan);
+}
+.ch-title { font-size:0.8rem; font-weight:600; margin-bottom:0.3rem; }
+.ch-bar { height:2px; background:rgba(255,255,255,0.05); border-radius:1px; overflow:hidden; }
+.ch-fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--purple)); border-radius:1px; }
+
+/* ── BLOCKCHAIN REGISTRY MODAL ── */
+.modal-overlay {
+  display:none;
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.85);
+  z-index:1000;
+  align-items:center; justify-content:center;
+  backdrop-filter:blur(6px);
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:linear-gradient(160deg, #12001f, #0f0018);
+  border:1px solid rgba(155,48,255,0.3);
+  border-radius:8px;
+  padding:2.5rem;
+  max-width:480px;
+  width:90%;
+  position:relative;
+  animation:modal-in 0.35s ease;
+}
+@keyframes modal-in { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.modal-close {
+  position:absolute; top:1rem; right:1rem;
+  background:transparent; border:none; color:var(--muted);
+  font-size:1.2rem; cursor:pointer;
+  transition:color 0.2s;
+}
+.modal-close:hover { color:#fff; }
+.modal-icon { font-size:2.5rem; text-align:center; margin-bottom:0.8rem; }
+.modal-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem; letter-spacing:0.1em;
+  text-align:center;
+  background:linear-gradient(135deg,var(--pink),var(--purple),var(--cyan));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:0.3rem;
+}
+.modal-sub {
+  font-family:'Space Mono',monospace;
+  font-size:0.6rem; letter-spacing:0.2em;
+  color:var(--cyan); text-align:center;
+  text-transform:uppercase; margin-bottom:1.5rem;
+}
+.modal-desc {
+  font-size:0.82rem; color:var(--muted);
+  line-height:1.7; text-align:center;
+  margin-bottom:1.5rem;
+}
+.modal-registry-items {
+  display:flex; flex-direction:column; gap:0.6rem;
+  margin-bottom:1.5rem;
+}
+.registry-item {
+  display:flex; align-items:center; gap:0.8rem;
+  padding:0.7rem 1rem;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:3px;
+}
+.registry-item-icon { font-size:1rem; }
+.registry-item-text { font-size:0.78rem; color:rgba(255,255,255,0.65); }
+.registry-item-text strong { color:#fff; }
+.modal-cta {
+  display:block; width:100%;
+  padding:0.9rem;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  border:none; color:#fff;
+  font-family:'Syne',sans-serif;
+  font-weight:700; font-size:0.8rem;
+  letter-spacing:0.08em; text-transform:uppercase;
+  cursor:pointer; border-radius:3px;
+  transition:all 0.3s;
+  margin-bottom:0.6rem;
+}
+.modal-cta:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(255,45,120,0.35); }
+.modal-free-note {
+  font-family:'Space Mono',monospace;
+  font-size:0.55rem; letter-spacing:0.1em;
+  color:var(--muted); text-align:center;
+  text-transform:uppercase;
+}
+
+/* ── BLOCKCHAIN VIEW PANEL ── */
+.blockchain-panel {
+  display:none;
+  background:var(--card);
+  border:1px solid rgba(155,48,255,0.2);
+  border-radius:6px;
+  padding:1.5rem;
+  margin-bottom:1.5rem;
+}
+.blockchain-panel.active { display:block; }
+.chain-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:1rem;
+}
+.chain-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem; letter-spacing:0.1em;
+}
+.chain-id {
+  font-family:'Space Mono',monospace;
+  font-size:0.55rem; letter-spacing:0.1em;
+  color:var(--cyan);
+}
+.chain-events {
+  display:flex; flex-direction:column; gap:0.5rem;
+}
+.chain-event {
+  display:flex; align-items:center; gap:1rem;
+  padding:0.5rem 0.8rem;
+  background:rgba(255,255,255,0.02);
+  border-left:2px solid;
+  font-size:0.75rem;
+}
+.chain-event.listen { border-color:var(--pink); }
+.chain-event.merch { border-color:var(--gold); }
+.chain-event.show { border-color:var(--purple); }
+.chain-event.view { border-color:var(--cyan); }
+.chain-event-icon { font-size:0.9rem; }
+.chain-event-label { flex:1; color:rgba(255,255,255,0.7); }
+.chain-event-time {
+  font-family:'Space Mono',monospace;
+  font-size:0.52rem; letter-spacing:0.08em;
+  color:var(--muted);
+}
+
+/* QUIZ/POLL MODAL */
+.quiz-modal {
+  display:none;
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.85);
+  z-index:1000;
+  align-items:center; justify-content:center;
+  backdrop-filter:blur(6px);
+}
+.quiz-modal.open { display:flex; }
+.quiz-box {
+  background:linear-gradient(160deg,#12001f,#0f0018);
+  border:1px solid rgba(0,245,255,0.3);
+  border-radius:8px;
+  padding:2rem;
+  max-width:420px; width:90%;
+  animation:modal-in 0.35s ease;
+}
+.quiz-type {
+  font-family:'Space Mono',monospace;
+  font-size:0.6rem; letter-spacing:0.2em;
+  color:var(--cyan); text-transform:uppercase;
+  margin-bottom:0.5rem;
+}
+.quiz-q {
+  font-family:'Syne',sans-serif;
+  font-weight:700; font-size:1.1rem;
+  margin-bottom:1.2rem; line-height:1.4;
+}
+.quiz-options { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem; }
+.quiz-opt {
+  padding:0.7rem 1rem;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:3px;
+  font-size:0.82rem;
+  cursor:pointer;
+  transition:all 0.2s;
+  color:rgba(255,255,255,0.75);
+}
+.quiz-opt:hover { border-color:rgba(0,245,255,0.4); background:rgba(0,245,255,0.06); color:#fff; }
+.quiz-opt.selected { border-color:var(--cyan); background:rgba(0,245,255,0.1); color:#fff; }
+.quiz-xp-note {
+  font-family:'Space Mono',monospace;
+  font-size:0.58rem; letter-spacing:0.1em;
+  color:var(--cyan); text-align:center;
+}
+.quiz-close {
+  float:right;
+  background:transparent; border:none; color:var(--muted);
+  font-size:1.1rem; cursor:pointer;
+}
+
+/* ── RESPONSIVE SCROLLBAR ── */
+.main::-webkit-scrollbar { width:4px; }
+.main::-webkit-scrollbar-track { background:transparent; }
+.main::-webkit-scrollbar-thumb { background:rgba(155,48,255,0.3); border-radius:2px; }
+
+/* Fade-in for sections */
+.fade-in {
+  opacity:0; transform:translateY(16px);
+  animation:fade-in 0.5s ease forwards;
+}
+@keyframes fade-in { to{opacity:1;transform:translateY(0)} }
+.d1{animation-delay:0.05s} .d2{animation-delay:0.12s} .d3{animation-delay:0.2s} .d4{animation-delay:0.28s} .d5{animation-delay:0.36s}
+</style>
+</head>
+<body>
+
+<!-- ──────────── SIDEBAR ──────────── -->
+<aside class="sidebar">
+  <!-- LOGO -->
+  <div class="sidebar-logo">
+    <div class="logo-gem">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gem1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ff2d78"/>
+            <stop offset="50%" stop-color="#9b30ff"/>
+            <stop offset="100%" stop-color="#00f5ff"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- Diamond / gem shape -->
+        <polygon points="40,6 68,28 40,74 12,28" fill="url(#gem1)" opacity="0.85" filter="url(#glow)"/>
+        <polygon points="40,6 68,28 40,38 12,28" fill="rgba(255,255,255,0.12)"/>
+        <polygon points="40,38 68,28 40,74" fill="rgba(0,0,0,0.25)"/>
+        <polygon points="40,38 12,28 40,74" fill="rgba(255,255,255,0.06)"/>
+        <polygon points="40,6 68,28 40,74 12,28" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <!-- inner sparkle -->
+        <circle cx="40" cy="28" r="3" fill="rgba(255,255,255,0.7)"/>
+      </svg>
+    </div>
+    <div class="logo-wordmark">UZI WORLD</div>
+    <div class="logo-sub">Fan Platform</div>
+  </div>
+
+  <!-- NAV -->
+  <ul class="nav-links">
+    <li><a href="#" class="active" onclick="setActive(this)">
+      <span class="nav-icon">⊞</span> Home
+    </a></li>
+    <li><a href="#" onclick="setActive(this);scrollTo('shows-section')">
+      <span class="nav-icon">🎤</span> Shows
+    </a></li>
+    <li><a href="#" onclick="setActive(this);scrollTo('videos-section')">
+      <span class="nav-icon">▶</span> Media
+    </a></li>
+    <li><a href="#" onclick="setActive(this);openWin()">
+      <span class="nav-icon">🏆</span> Win
+    </a></li>
+    <li><a href="#" onclick="setActive(this)">
+      <span class="nav-icon">👤</span> Menu
+    </a></li>
+  </ul>
+
+  <!-- XP -->
+  <div class="sidebar-xp">
+    <div class="xp-amount"><span id="xpCount">350</span> XP</div>
+    <a class="xp-edit" href="#">Edit Profile</a>
+    <div class="xp-bar-mini"><div class="xp-bar-fill"></div></div>
+  </div>
+
+  <!-- REGISTER + LOG OUT -->
+  <div class="sidebar-register">
+    <button class="register-btn" onclick="openModal()">Create Fan ID 🔗</button>
+    <button class="logout-btn">LOG OUT</button>
+  </div>
+</aside>
+
+<!-- ──────────── MAIN ──────────── -->
+<main class="main">
+
+  <!-- STORIES -->
+  <div class="section-label fade-in d1">
+    STORIES
+  </div>
+  <div class="stories-row fade-in d1">
+    <div class="story-item" onclick="earnXP(5)">
+      <div class="story-thumb new">
+        <div class="story-ring"></div>
+        🎤
+      </div>
+      <div class="story-label">Tour Announcement</div>
+    </div>
+    <div class="story-item" onclick="earnXP(5)">
+      <div class="story-thumb new">
+        <div class="story-ring"></div>
+        🎬
+      </div>
+      <div class="story-label">Pink Tape BTS</div>
+    </div>
+    <div class="story-item" onclick="earnXP(5)">
+      <div class="story-thumb">🛸</div>
+      <div class="story-label">Alien Boy Night</div>
+    </div>
+    <div class="story-item" onclick="earnXP(5)">
+      <div class="story-thumb new">
+        <div class="story-ring"></div>
+        👕
+      </div>
+      <div class="story-label">Drop Alert</div>
+    </div>
+    <div class="story-item" onclick="earnXP(5)">
+      <div class="story-thumb">📸</div>
+      <div class="story-label">Roc Nation Visit</div>
+    </div>
+    <div class="story-item" onclick="earnXP(5)">
+      <div class="story-thumb">🎹</div>
+      <div class="story-label">Studio Session</div>
+    </div>
+    <div class="story-item" onclick="earnXP(5)">
+      <div class="story-thumb">🌐</div>
+      <div class="story-label">Lil Uzi Live</div>
+    </div>
+  </div>
+
+  <!-- UZI ONES BLOCKCHAIN CTA -->
+  <div class="uzi-ones-cta fade-in d2" onclick="openModal()">
+    <div class="uzi-ones-left">
+      <div class="uzi-ones-icon">💎</div>
+      <div class="uzi-ones-title">UZI ONES FAN REGISTRY</div>
+      <div class="uzi-ones-sub">Blockchain Verified · Every Listen. Every Show. Every Drop.</div>
+    </div>
+    <div class="uzi-ones-right">
+      <div class="uzi-ones-stats">
+        <div class="ones-stat">
+          <div class="ones-stat-num">47K</div>
+          <div class="ones-stat-label">Registered</div>
+        </div>
+        <div class="ones-stat">
+          <div class="ones-stat-num">FREE</div>
+          <div class="ones-stat-label">Always</div>
+        </div>
+      </div>
+      <div class="cta-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- BLOCKCHAIN PANEL (shown after registration) -->
+  <div class="blockchain-panel" id="chainPanel">
+    <div class="chain-header">
+      <div class="chain-title">💎 YOUR FAN RECORD — ON CHAIN</div>
+      <div class="chain-id">ID: UZI-7F3A2C...9B1E</div>
+    </div>
+    <div class="chain-events">
+      <div class="chain-event listen">
+        <div class="chain-event-icon">🎵</div>
+        <div class="chain-event-label">Streamed <strong>Pink Tape</strong> — 47 total plays logged</div>
+        <div class="chain-event-time">Today</div>
+      </div>
+      <div class="chain-event show">
+        <div class="chain-event-icon">🎤</div>
+        <div class="chain-event-label">Attended <strong>The Pink Tape Tour — Chicago</strong></div>
+        <div class="chain-event-time">Jan 12</div>
+      </div>
+      <div class="chain-event merch">
+        <div class="chain-event-icon">👕</div>
+        <div class="chain-event-label">Purchased <strong>Eternal Atake Hoodie</strong> via platform</div>
+        <div class="chain-event-time">Dec 28</div>
+      </div>
+      <div class="chain-event view">
+        <div class="chain-event-icon">▶</div>
+        <div class="chain-event-label">Watched <strong>Alien Boy Studio Session</strong> exclusive drop</div>
+        <div class="chain-event-time">Dec 20</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WIN BANNER -->
+  <div class="win-banner fade-in d2" id="shows-section" onclick="openWin()">
+    <div class="win-text-row">
+      <div class="win-icon">🎟</div>
+      <div>
+        <div class="win-title">Win VIP Passes — Pink Tape Tour</div>
+        <div class="win-sub">New York · March 8 · Backstage Access Available</div>
+      </div>
+    </div>
+    <button class="win-enter">Enter Free →</button>
+  </div>
+
+  <!-- XP CHALLENGES -->
+  <div class="section-label fade-in d3">XP CHALLENGES</div>
+  <div class="challenges-row fade-in d3">
+    <div class="challenge-card" onclick="openQuiz('poll')">
+      <div class="ch-header">
+        <div class="ch-type">📊 Poll</div>
+        <div class="ch-xp">+25 XP</div>
+      </div>
+      <div class="ch-title">Best Lil Uzi Era?</div>
+      <div class="ch-bar"><div class="ch-fill" style="width:0%"></div></div>
+    </div>
+    <div class="challenge-card" onclick="openQuiz('quiz')">
+      <div class="ch-header">
+        <div class="ch-type">🧠 Quiz</div>
+        <div class="ch-xp">+50 XP</div>
+      </div>
+      <div class="ch-title">Lil Uzi Trivia — Level 2</div>
+      <div class="ch-bar"><div class="ch-fill" style="width:40%"></div></div>
+    </div>
+    <div class="challenge-card" onclick="earnXP(30);alert('🎮 Game launching! +30 XP earned')">
+      <div class="ch-header">
+        <div class="ch-type">🎮 Game</div>
+        <div class="ch-xp">+30 XP</div>
+      </div>
+      <div class="ch-title">Beat Drop — Rhythm Challenge</div>
+      <div class="ch-bar"><div class="ch-fill" style="width:15%"></div></div>
+    </div>
+  </div>
+
+  <!-- VIDEOS -->
+  <div class="section-label fade-in d4" id="videos-section">
+    VIDEOS <span class="view-all">VIEW ALL ›</span>
+  </div>
+
+  <div class="video-featured fade-in d4" onclick="earnXP(5)">
+    <div class="video-bg">🎤</div>
+    <div class="video-overlay"></div>
+    <div class="video-live-badge"><div class="live-dot"></div> LIVE</div>
+    <div class="video-xp">+5 Points</div>
+    <div class="video-play">▶</div>
+    <div class="video-title-bar">
+      <div class="video-title-main">Lil Uzi Vert — Pink Tape Tour: Night One Full Backstage Access</div>
+    </div>
+  </div>
+
+  <div class="videos-grid-mini fade-in d5">
+    <div class="video-mini" onclick="earnXP(5)">
+      <div class="video-mini-thumb">🛸<div class="mini-play">▶</div></div>
+      <div class="video-mini-info">
+        <div class="video-mini-xp">+5 XP</div>
+        <div class="video-mini-title">Alien Boy Era — Best Moments Breakdown</div>
+      </div>
+    </div>
+    <div class="video-mini" onclick="earnXP(5)">
+      <div class="video-mini-thumb">🎹<div class="mini-play">▶</div></div>
+      <div class="video-mini-info">
+        <div class="video-mini-xp">+5 XP</div>
+        <div class="video-mini-title">Studio Session: Making of "Ps & Qs"</div>
+      </div>
+    </div>
+    <div class="video-mini" onclick="earnXP(5)">
+      <div class="video-mini-thumb">💎<div class="mini-play">▶</div></div>
+      <div class="video-mini-info">
+        <div class="video-mini-xp">+5 XP</div>
+        <div class="video-mini-title">Lil Uzi Vert x Roc Nation: New Era Begins</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ──────────── UZI ONES MODAL ──────────── -->
+<div class="modal-overlay" id="registryModal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('registryModal').classList.remove('open')">✕</button>
+    <div class="modal-icon">💎</div>
+    <div class="modal-title">UZI ONES</div>
+    <div class="modal-sub">Blockchain Fan Registry · Free Forever</div>
+    <p class="modal-desc">
+      Your official record as a Lil Uzi Vert fan — permanently logged on-chain. 
+      Every listen, merch purchase, show you attended, and content you've viewed is 
+      stored to your Fan ID. Uzi and the team can see your history to create 
+      exclusive experiences for the most dedicated fans.
+    </p>
+    <div class="modal-registry-items">
+      <div class="registry-item">
+        <div class="registry-item-icon">🎵</div>
+        <div class="registry-item-text">Every <strong>stream + listen</strong> logged to your fan record</div>
+      </div>
+      <div class="registry-item">
+        <div class="registry-item-icon">👕</div>
+        <div class="registry-item-text">Every <strong>merch & apparel</strong> purchase verified on-chain</div>
+      </div>
+      <div class="registry-item">
+        <div class="registry-item-icon">🎤</div>
+        <div class="registry-item-text">Every <strong>show attended</strong> — viewable by Uzi's team</div>
+      </div>
+      <div class="registry-item">
+        <div class="registry-item-icon">▶</div>
+        <div class="registry-item-text">Every <strong>exclusive video + drop</strong> you've watched</div>
+      </div>
+      <div class="registry-item">
+        <div class="registry-item-icon">👑</div>
+        <div class="registry-item-text"><strong>Uzi Ones collectibles</strong> — only Uzi + top superfans hold these</div>
+      </div>
+    </div>
+    <button class="modal-cta" onclick="registerFan()">Register My Fan ID — Free</button>
+    <div class="modal-free-note">No credit card · No paywall · Always free to join</div>
+  </div>
+</div>
+
+<!-- ──────────── QUIZ / POLL MODAL ──────────── -->
+<div class="quiz-modal" id="quizModal">
+  <div class="quiz-box">
+    <button class="quiz-close" onclick="document.getElementById('quizModal').classList.remove('open')">✕</button>
+    <div class="quiz-type" id="quizType">Poll</div>
+    <div class="quiz-q" id="quizQ">What's the best Lil Uzi Vert era?</div>
+    <div class="quiz-options" id="quizOpts"></div>
+    <div class="quiz-xp-note" id="quizXpNote">Select your answer to earn XP</div>
+  </div>
+</div>
+
+<script>
+/* ── NAV ── */
+function setActive(el) {
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ── XP ── */
+let xp = 350;
+function earnXP(n) {
+  xp += n;
+  document.getElementById('xpCount').textContent = xp;
+  // mini flash
+  const el = document.getElementById('xpCount');
+  el.style.color = '#00f5ff';
+  el.style.transition = 'color 0s';
+  setTimeout(() => { el.style.transition = 'color 1s'; el.style.color = ''; }, 500);
+}
+
+/* ── MODAL ── */
+function openModal() {
+  document.getElementById('registryModal').classList.add('open');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('registryModal'))
+    document.getElementById('registryModal').classList.remove('open');
+}
+function registerFan() {
+  document.getElementById('registryModal').classList.remove('open');
+  document.getElementById('chainPanel').classList.add('active');
+  earnXP(100);
+  alert('🎉 Fan ID created! +100 XP awarded.\n\n💎 UZI-7F3A2C...9B1E\n\nYour listen history, show attendance, and merch purchases are now being tracked to your on-chain record.');
+}
+
+/* ── WIN ── */
+function openWin() {
+  alert('🎟 Pink Tape Tour — NYC\nMarch 8 · Barclays Center\n\nEntering VIP sweepstakes... +10 XP earned!\n\nYou\'ll be notified if you win backstage access.');
+  earnXP(10);
+}
+
+/* ── QUIZ / POLL ── */
+const quizData = {
+  poll: {
+    type: 'Poll',
+    q: 'What\'s the best Lil Uzi Vert era?',
+    opts: ['Luv Is Rage', 'Eternal Atake', 'Pink Tape', 'The Pink Tape Deluxe'],
+    xp: 25
+  },
+  quiz: {
+    type: 'Quiz',
+    q: 'What city is Lil Uzi Vert originally from?',
+    opts: ['Philadelphia, PA', 'Atlanta, GA', 'New York, NY', 'Houston, TX'],
+    xp: 50,
+    correct: 0
+  }
+};
+
+function openQuiz(type) {
+  const data = quizData[type];
+  document.getElementById('quizType').textContent = type === 'poll' ? '📊 Poll' : '🧠 Quiz';
+  document.getElementById('quizQ').textContent = data.q;
+  document.getElementById('quizXpNote').textContent = `Select your answer to earn +${data.xp} XP`;
+  const container = document.getElementById('quizOpts');
+  container.innerHTML = '';
+  data.opts.forEach((opt, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => {
+      container.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      setTimeout(() => {
+        earnXP(data.xp);
+        document.getElementById('quizModal').classList.remove('open');
+        if (type === 'quiz' && i === data.correct) {
+          alert(`✅ Correct! +${data.xp} XP earned!`);
+        } else if (type === 'quiz') {
+          alert(`❌ Not quite! Still earned +${data.xp} XP for participating.`);
+        } else {
+          alert(`📊 Vote recorded! +${data.xp} XP earned!`);
+        }
+      }, 600);
+    };
+    container.appendChild(btn);
+  });
+  document.getElementById('quizModal').classList.add('open');
+}
+</script>
+</body>
+</html>
